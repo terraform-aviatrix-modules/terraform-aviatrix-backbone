@@ -30,7 +30,7 @@ This file can then be ingested with the yamldecode function:
 
 ```
 module "framework" {
-  source  = "terraform-aviatrix-modules/mc-transit-deployment-framework/aviatrix"
+  source  = "terraform-aviatrix-modules/backbone/aviatrix"
   version = "v1.1.2"
 
   default_transit_accounts = {

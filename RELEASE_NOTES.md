@@ -1,4 +1,4 @@
-# terraform-aviatrix-mc-transit-deployment-framework - release notes
+# terraform-aviatrix-backbone - release notes
 
 ## v1.1.2
 - Add support for enable_monitor_gateway_subnets

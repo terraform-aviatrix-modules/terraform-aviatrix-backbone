@@ -19,11 +19,11 @@ The reason for the AS Path prepending is to optimize traffic patterns that origi
 
 As you can see in the example below, where no prepending is applied, both the purple and orange paths to AWS US are equal in length and thus equally desireable. The orange path however is clearly undesirable from a cost perspective, as traffic has to traverse through Azure, incurring unwanted egress charges. On top of that, it's unlikely that the path from the Azure region in Europe provides a better quality path than the path that the AWS region in Europe provides, as that traffic stays on the AWS backbone.
 
-<img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit-deployment-framework/blob/main/img/optimized-peering-no-prepending.png?raw=true" title="No prepending">
+<img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/optimized-peering-no-prepending.png?raw=true" title="No prepending">
 
 In order to prevent the above scenario, we need to make the path between different clouds, less desireable than within a single cloud. In order to achieve this, AS Path prepending is applied on any inter-cloud peering as shown in blue.
 
-<img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit-deployment-framework/blob/main/img/optimized-peering-with-prepending.png?raw=true" title="With prepending">
+<img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/optimized-peering-with-prepending.png?raw=true" title="With prepending">
 
 This makes the orange path less desireable, as it's length is now longer than the purple path. As such our traffic now follows the optimized purple path. The orange path will still remain available for high-availability, were the purple path to become unavailable. This design has one side effect though. Because the inter-cloud path is now prepended, traffic between Azure and AWS in the Europe region would consider the path over the datacenter just as desireable as the direct path, because they would equal to a length of 2. To negate this, make sure to prepend the AS Path for any prefixes announced towards the DC. That way, when the DC propagates them onto the BGP peering with the other region, the path length will be longer than the direct path.
 
