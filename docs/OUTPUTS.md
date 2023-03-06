@@ -7,7 +7,7 @@ For the examples below, we will assume that the below environment was deployed. 
 ```hcl
 module "framework" {
   source  = "terraform-aviatrix-modules/backbone/aviatrix"
-  version = "v1.1.1"
+  version = "v1.1.2"
 
   default_transit_accounts = {
     aws   = "AWS-Account",
