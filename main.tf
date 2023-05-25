@@ -1,7 +1,7 @@
 #This module builds out all transits
 module "transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.4.1"
+  version = "2.5.0"
 
   for_each = var.transit_firenet
 
@@ -63,12 +63,13 @@ module "transit" {
   ha_azure_eip_name_resource_group = each.value.transit_ha_azure_eip_name_resource_group
   enable_vpc_dns_server            = each.value.transit_enable_vpc_dns_server
   enable_monitor_gateway_subnets   = each.value.transit_enable_monitor_gateway_subnets
+  enable_gro_gso                   = each.value.transit_enable_gro_gso
 }
 
 #This module builds out firenet, only on transits for which Firenet is enabled.
 module "firenet" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "1.4.1"
+  version = "1.5.0"
 
   for_each = { for k, v in var.transit_firenet : k => v if v.firenet } #Filter transits that have firenet enabled
 
