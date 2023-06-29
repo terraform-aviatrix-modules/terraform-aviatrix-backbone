@@ -1,5 +1,8 @@
 # terraform-aviatrix-backbone - release notes
 
+## v1.2.1
+- Add support for BGP Hold time for transit gateway.
+
 ## v1.2.0
 - Bump module versions to support Controller version 7.1 and provider version 3.1.x.
 

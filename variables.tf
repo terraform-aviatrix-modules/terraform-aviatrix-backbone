@@ -64,6 +64,7 @@ variable "transit_firenet" {
     transit_enable_vpc_dns_server            = optional(bool),
     transit_enable_monitor_gateway_subnets   = optional(bool),
     transit_enable_gro_gso                   = optional(bool),
+    transit_bgp_hold_time                    = optional(number),
 
     #Firenet arguments
     firenet                                      = optional(bool, false),

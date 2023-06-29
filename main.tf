@@ -1,7 +1,7 @@
 #This module builds out all transits
 module "transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.5.0"
+  version = "2.5.1"
 
   for_each = var.transit_firenet
 
@@ -64,6 +64,7 @@ module "transit" {
   enable_vpc_dns_server            = each.value.transit_enable_vpc_dns_server
   enable_monitor_gateway_subnets   = each.value.transit_enable_monitor_gateway_subnets
   enable_gro_gso                   = each.value.transit_enable_gro_gso
+  bgp_hold_time                    = each.value.transit_bgp_hold_time
 }
 
 #This module builds out firenet, only on transits for which Firenet is enabled.
