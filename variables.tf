@@ -19,19 +19,18 @@ variable "transit_firenet" {
     transit_enable_active_standby_preemptive = optional(bool),
     transit_enable_advertise_transit_cidr    = optional(bool),
     transit_enable_bgp_over_lan              = optional(bool),
-    transit_enable_egress_transit_firenet    = optional(bool, false),
+    transit_enable_egress_transit_firenet    = optional(bool),
     transit_enable_encrypt_volume            = optional(bool),
     transit_enable_firenet                   = optional(bool),
     transit_enable_multi_tier_transit        = optional(bool),
     transit_enable_s2c_rx_balancing          = optional(bool),
-    transit_enable_transit_firenet           = optional(bool, false),
+    transit_enable_transit_firenet           = optional(bool),
     transit_gw_name                          = optional(string),
     transit_ha_bgp_lan_interfaces            = optional(list(map(string))),
     transit_ha_cidr                          = optional(string),
     transit_ha_gw                            = optional(bool),
     transit_ha_region                        = optional(string),
     transit_hybrid_connection                = optional(bool),
-    transit_insane_mode                      = optional(bool),
     transit_insane_mode                      = optional(bool),
     transit_instance_size                    = optional(string),
     transit_lan_cidr                         = optional(string),
@@ -40,7 +39,7 @@ variable "transit_firenet" {
     transit_legacy_transit_vpc               = optional(bool),
     transit_name                             = optional(string),
     transit_resource_group                   = optional(string),
-    transit_segmentation                     = optional(bool, true),
+    transit_segmentation                     = optional(bool),
     transit_single_az_ha                     = optional(bool),
     transit_single_ip_snat                   = optional(bool),
     transit_tags                             = optional(map(string)),
@@ -67,7 +66,7 @@ variable "transit_firenet" {
     transit_bgp_hold_time                    = optional(number),
 
     #Firenet arguments
-    firenet                                      = optional(bool, false),
+    firenet                                      = optional(bool),
     firenet_attached                             = optional(bool),
     firenet_bootstrap_bucket_name_1              = optional(string),
     firenet_bootstrap_bucket_name_2              = optional(string),
@@ -98,6 +97,51 @@ variable "transit_firenet" {
     firenet_user_data_2                          = optional(string),
     firenet_username                             = optional(string),
   }))
+}
+
+variable "global_settings" {
+  description = "This variable is used to set settings that need to apply to all transit/firenets."
+  default     = {}
+  type = object({
+
+    #Transit arguments
+    transit_accounts                         = optional(map(string), {}),
+    transit_bgp_ecmp                         = optional(bool),
+    transit_bgp_polling_time                 = optional(number),
+    transit_connected_transit                = optional(bool),
+    transit_customer_managed_keys            = optional(bool),
+    transit_enable_active_standby_preemptive = optional(bool),
+    transit_enable_advertise_transit_cidr    = optional(bool),
+    transit_enable_egress_transit_firenet    = optional(bool, false),
+    transit_enable_encrypt_volume            = optional(bool),
+    transit_enable_multi_tier_transit        = optional(bool),
+    transit_enable_s2c_rx_balancing          = optional(bool),
+    transit_enable_transit_firenet           = optional(bool),
+    transit_ha_gw                            = optional(bool),
+    transit_insane_mode                      = optional(bool),
+    transit_learned_cidr_approval            = optional(bool),
+    transit_learned_cidrs_approval_mode      = optional(string),
+    transit_segmentation                     = optional(bool, true),
+    transit_single_az_ha                     = optional(bool),
+    transit_tags                             = optional(map(string)),
+    transit_tunnel_detection_time            = optional(number),
+    transit_enable_preserve_as_path          = optional(bool),
+    transit_enable_monitor_gateway_subnets   = optional(bool),
+    transit_enable_gro_gso                   = optional(bool),
+    transit_bgp_hold_time                    = optional(number),
+
+    #Firenet arguments
+    firenet                                      = optional(bool, false),
+    firenet_attached                             = optional(bool),
+    firenet_east_west_inspection_excluded_cidrs  = optional(list(string)),
+    firenet_egress_enabled                       = optional(bool),
+    firenet_egress_static_cidrs                  = optional(list(string)),
+    firenet_firewall_image                       = optional(map(string), {}),
+    firenet_fw_amount                            = optional(number),
+    firenet_inspection_enabled                   = optional(bool),
+    firenet_keep_alive_via_lan_interface_enabled = optional(bool),
+    firenet_tags                                 = optional(map(string)),
+  })
 }
 
 variable "default_transit_accounts" {

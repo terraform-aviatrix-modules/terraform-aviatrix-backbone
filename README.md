@@ -17,16 +17,22 @@ module "framework" {
   source  = "terraform-aviatrix-modules/backbone/aviatrix"
   version = "v1.2.1"
 
-  default_transit_accounts = {
-    aws   = "AWS-Account",
-    azure = "Azure-Account",
-    gcp   = "GCP-Account",
-  }
+  global_settings = {
 
-  default_firenet_firewall_image = {
-    aws   = "Palo Alto Networks VM-Series Next-Generation Firewall Bundle 1",
-    azure = "Palo Alto Networks VM-Series Next-Generation Firewall Bundle 1",
-    gcp   = "Palo Alto Networks VM-Series Next-Generation Firewall BUNDLE1",
+    transit_accounts = {
+      aws   = "AWS-Account",
+      azure = "Azure-Account",
+      gcp   = "GCP-Account",
+    }
+
+    firenet_firewall_image = {
+      aws   = "Palo Alto Networks VM-Series Next-Generation Firewall Bundle 1",
+      azure = "Palo Alto Networks VM-Series Next-Generation Firewall Bundle 1",
+      gcp   = "Palo Alto Networks VM-Series Next-Generation Firewall BUNDLE1",
+    }
+
+    transit_ha_gw = false
+
   }
 
   transit_firenet = {
@@ -84,14 +90,11 @@ The following variables are optional:
 
 key | default | value 
 :---|:---|:---
-default_transit_accounts** | | Map of default access accounts to be used to deploy the transit Firenet infrastructure. (Valid keys are "aws", "azure", "gcp", "oci" and "ali".)
-default_firenet_firewall_image** | | Map of default firewall images for deploying Firenet. (Valid keys are "aws", "azure", "gcp" and "oci".)
+global_settings | | Map of values to override default behavior or set standard values.
 excluded_cidrs | ["0.0.0.0/0", ] | List of CIDR's to exlude in peerings (not used for custom peerings).
 [peering_mode](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/docs/PEERING.md) | full_mesh_optimized | Choose between full_mesh, full_mesh_optimized, custom or none.
 [peering_map](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/docs/PEERING.md#custom) | {} | If peering_mode is custom, this map of peerings will be built. Example see link.
 [peering_prune_list](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/docs/PEERING.md#pruning) | [] | If peering_mode is full_mesh or optimized_full_mesh, this list of peerings will NOT be built. Example see link.
-
-**Any defaults that are not configured, need to be explicitly set in the transit_firenet variable for each entry, _if_ the argument is used (e.g. firenet_firewall_image does not require to be set if firenet is not deployed altogether).
 
 ### Transit Firenet map arguments
 Arguments in this map prepended with "transit_" are pushed to the underlying mc-transit module. Arguments prepended with "firenet_" are pushed to the mc-firenet module. As such, more details on these arguments can also be found in the documentation of the [mc-transit](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit) and [mc-firenet](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet) modules. (e.g. "transit_cidr" maps to the "cidr" argument on the mc-transit module)
@@ -110,7 +113,7 @@ Any options set here will override the default_* variables for that particular i
 
 <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/aws.png?raw=true" title="AWS"> = AWS, <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/azure.png?raw=true" title="Azure"> = Azure, <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/gcp.png?raw=true" title="GCP"> = GCP, <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/oci.png?raw=true" title="OCI"> = OCI, <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/alibaba.png?raw=true" title="Alibaba"> = Alibaba
 
-Key | Supported_CSP's |  Default value | Description
+Key | Supported_CSP's | Default value | Description
 :-- | --: | :-- | :--
 transit_allocate_new_eip | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/azure.png?raw=true" title="Azure"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/gcp.png?raw=true" title="GCP"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/oci.png?raw=true" title="OCI"> | null | When value is false, reuse an idle address in Elastic IP pool for this gateway. Otherwise, allocate a new Elastic IP and use it for this gateway.
 transit_account** | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/azure.png?raw=true" title="Azure"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/gcp.png?raw=true" title="GCP"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/oci.png?raw=true" title="OCI"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/alibaba.png?raw=true" title="Alibaba"> | | Access accounts to be used to deploy the transit Firenet infrastructure.
@@ -200,6 +203,47 @@ firenet_mgmt_cidr | <img src="https://github.com/terraform-aviatrix-modules/terr
 [firenet_user_data_1](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance#user_data) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/azure.png?raw=true" title="Azure"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/gcp.png?raw=true" title="GCP"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/oci.png?raw=true" title="OCI"> | | Userdata to bootstrap FortiGate or Checkpoint Firewall.
 [firenet_user_data_2](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance#user_data) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/azure.png?raw=true" title="Azure"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/gcp.png?raw=true" title="GCP"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/oci.png?raw=true" title="OCI"> | | Userdata to bootstrap FortiGate or Checkpoint Firewall. If not set, user_data_1 will be used.
 [firenet_username](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_firewall_instance#username) | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/img/azure.png?raw=true" title="Azure"> | fwadmin | Applicable to Azure or AzureGov deployment only. "admin" as a username is not accepted. (For Checkpoint it is always admin)
+
+### Global settings for Transit Firenet map
+If you want to override default settings, without having to declare them for each individual entry in the transit firenet map, you can do that by defining the `global_settings` map.
+The following items are supported:
+
+key | type
+:--- | :---
+transit_accounts | map(string)
+transit_bgp_ecmp | bool
+transit_bgp_polling_time | number
+transit_connected_transit| bool
+transit_customer_managed_keys| bool
+transit_enable_active_standby_preemptive | bool
+transit_enable_advertise_transit_cidr| bool
+transit_enable_egress_transit_firenet| bool
+transit_enable_encrypt_volume| bool
+transit_enable_multi_tier_transit| bool
+transit_enable_s2c_rx_balancing | bool
+transit_enable_transit_firenet | bool
+transit_ha_gw| bool
+transit_insane_mode | bool
+transit_learned_cidr_approval| bool
+transit_learned_cidrs_approval_mode | string
+transit_segmentation | bool
+transit_single_az_ha | bool
+transit_tags | map(string)
+transit_tunnel_detection_time| number
+transit_enable_preserve_as_path | bool
+transit_enable_monitor_gateway_subnets | bool
+transit_enable_gro_gso | bool
+transit_bgp_hold_time| number
+firenet | bool
+firenet_attached | bool
+firenet_east_west_inspection_excluded_cidrs | list(string)
+firenet_egress_enabled | bool
+firenet_egress_static_cidrs | list(string)
+firenet_firewall_image | map(string)
+firenet_fw_amount| number
+firenet_inspection_enabled | bool
+firenet_keep_alive_via_lan_interface_enabled | bool
+firenet_tags | map(string)
 
 ### Outputs
 This module will return the following outputs:
