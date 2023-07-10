@@ -184,6 +184,7 @@ variable "peering_map" {
     tunnel_count                                = optional(number),
     enable_peering_over_private_network         = optional(bool),
     enable_insane_mode_encryption_over_internet = optional(bool),
+    enable_max_performance                      = optional(bool),
   }))
 
   description = "If peering_mode is custom, this map of peerings will be built."

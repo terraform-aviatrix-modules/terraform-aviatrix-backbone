@@ -197,5 +197,6 @@ resource "aviatrix_transit_gateway_peering" "custom_peering" {
   tunnel_count                                = each.value.tunnel_count
   enable_peering_over_private_network         = each.value.enable_peering_over_private_network
   enable_insane_mode_encryption_over_internet = each.value.enable_insane_mode_encryption_over_internet
+  enable_max_performance                      = each.value.enable_max_performance
 }
 ##########################################
