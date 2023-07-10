@@ -1,5 +1,8 @@
 # terraform-aviatrix-backbone - release notes
 
+## v1.2.2
+- Add support for setting `enable_max_performance` on custom peerings map.
+
 ## v1.2.1
 - Add support for BGP Hold time for transit gateway.
 - Introduction of global_settings variable
