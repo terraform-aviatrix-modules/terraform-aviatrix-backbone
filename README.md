@@ -91,6 +91,7 @@ The following variables are optional:
 key | default | value 
 :---|:---|:---
 global_settings | | Map of values to override default behavior or set standard values.
+enable_max_performance | | Enable/disable multiple tunnels for peerings between HPE gateways.
 excluded_cidrs | ["0.0.0.0/0", ] | List of CIDR's to exlude in peerings (not used for custom peerings).
 [peering_mode](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/docs/PEERING.md) | full_mesh_optimized | Choose between full_mesh, full_mesh_optimized, custom or none.
 [peering_map](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/docs/PEERING.md#custom) | {} | If peering_mode is custom, this map of peerings will be built. Example see link.
