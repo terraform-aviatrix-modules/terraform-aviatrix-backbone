@@ -110,6 +110,7 @@ variable "global_settings" {
     transit_bgp_polling_time                 = optional(number),
     transit_connected_transit                = optional(bool),
     transit_customer_managed_keys            = optional(bool),
+    transit_enable_active_standby            = optional(bool),
     transit_enable_active_standby_preemptive = optional(bool),
     transit_enable_advertise_transit_cidr    = optional(bool),
     transit_enable_egress_transit_firenet    = optional(bool, false),
