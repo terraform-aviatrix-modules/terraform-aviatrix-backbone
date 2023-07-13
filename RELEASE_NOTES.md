@@ -1,5 +1,8 @@
 # terraform-aviatrix-backbone - release notes
 
+## v1.1.3
+- Add support for `enable_active_standby`.
+
 ## v1.1.2
 - Add support for enable_monitor_gateway_subnets
 - Fix input variable type for transit_bgp_lan_interfaces and transit_ha_bgp_lan_interfaces.

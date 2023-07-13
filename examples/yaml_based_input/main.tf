@@ -1,6 +1,6 @@
 module "framework" {
   source  = "terraform-aviatrix-modules/backbone/aviatrix"
-  version = "v1.1.2"
+  version = "v1.1.3"
 
   default_transit_accounts = {
     azure = "Azure",

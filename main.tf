@@ -19,6 +19,7 @@ module "transit" {
   bgp_polling_time                 = each.value.transit_bgp_polling_time
   connected_transit                = each.value.transit_connected_transit
   customer_managed_keys            = each.value.transit_customer_managed_keys
+  enable_active_standby            = each.value.transit_enable_active_standby
   enable_active_standby_preemptive = each.value.transit_enable_active_standby_preemptive
   enable_advertise_transit_cidr    = each.value.transit_enable_advertise_transit_cidr
   enable_bgp_over_lan              = each.value.transit_enable_bgp_over_lan
