@@ -1,57 +1,80 @@
 #This module builds out all transits
 module "transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.4.1"
+  version = "2.5.1"
 
   for_each = var.transit_firenet
 
-  cloud                            = each.value.transit_cloud
-  cidr                             = each.value.transit_cidr
-  region                           = each.value.transit_region_name
-  local_as_number                  = each.value.transit_asn
-  account                          = coalesce(each.value.transit_account, lookup(var.default_transit_accounts, each.value.transit_cloud, null))
+  cloud           = each.value.transit_cloud
+  cidr            = each.value.transit_cidr
+  region          = each.value.transit_region_name
+  local_as_number = each.value.transit_asn
+
+  account = coalesce(
+    each.value.transit_account,
+    lookup(var.default_transit_accounts, each.value.transit_cloud, null), #To be removed when removing support for default_transit_accounts variable
+    lookup(var.global_settings.transit_accounts, each.value.transit_cloud, null)
+  )
+
   az_support                       = each.value.transit_az_support
   az1                              = each.value.transit_az1
   az2                              = each.value.transit_az2
-  bgp_ecmp                         = each.value.transit_bgp_ecmp
+  bgp_ecmp                         = try(coalesce(each.value.transit_bgp_ecmp, var.global_settings.transit_bgp_ecmp), null)
   bgp_lan_interfaces               = each.value.transit_bgp_lan_interfaces
   bgp_manual_spoke_advertise_cidrs = each.value.transit_bgp_manual_spoke_advertise_cidrs
-  bgp_polling_time                 = each.value.transit_bgp_polling_time
-  connected_transit                = each.value.transit_connected_transit
-  customer_managed_keys            = each.value.transit_customer_managed_keys
-  enable_active_standby_preemptive = each.value.transit_enable_active_standby_preemptive
-  enable_advertise_transit_cidr    = each.value.transit_enable_advertise_transit_cidr
+  bgp_polling_time                 = try(coalesce(each.value.transit_bgp_polling_time, var.global_settings.transit_bgp_polling_time), null)
+  connected_transit                = try(coalesce(each.value.transit_connected_transit, var.global_settings.transit_connected_transit), null)
+  customer_managed_keys            = try(coalesce(each.value.transit_customer_managed_keys, var.global_settings.transit_customer_managed_keys), null)
+  enable_active_standby            = try(coalesce(each.value.transit_enable_active_standby, var.global_settings.transit_enable_active_standby), null)
+  enable_active_standby_preemptive = try(coalesce(each.value.transit_enable_active_standby_preemptive, var.global_settings.transit_enable_active_standby_preemptive), null)
+  enable_advertise_transit_cidr    = try(coalesce(each.value.transit_enable_advertise_transit_cidr, var.global_settings.transit_enable_advertise_transit_cidr), null)
   enable_bgp_over_lan              = each.value.transit_enable_bgp_over_lan
-  enable_egress_transit_firenet    = each.value.transit_enable_egress_transit_firenet
-  enable_encrypt_volume            = coalesce(each.value.transit_enable_encrypt_volume, lower(each.value.transit_cloud) == "aws" ? true : false)
+  enable_egress_transit_firenet    = try(coalesce(each.value.transit_enable_egress_transit_firenet, var.global_settings.transit_enable_egress_transit_firenet), null)
+  enable_encrypt_volume            = coalesce(each.value.transit_enable_encrypt_volume, var.global_settings.transit_enable_encrypt_volume, lower(each.value.transit_cloud) == "aws" ? true : false)
   enable_firenet                   = each.value.transit_enable_firenet
-  enable_multi_tier_transit        = each.value.transit_enable_multi_tier_transit
-  enable_s2c_rx_balancing          = each.value.transit_enable_s2c_rx_balancing
-  enable_segmentation              = each.value.transit_enable_egress_transit_firenet ? false : each.value.transit_segmentation
-  enable_transit_firenet           = each.value.transit_enable_transit_firenet || each.value.firenet
+  enable_multi_tier_transit        = try(coalesce(each.value.transit_enable_multi_tier_transit, var.global_settings.transit_enable_multi_tier_transit), null)
+  enable_s2c_rx_balancing          = try(coalesce(each.value.transit_enable_s2c_rx_balancing, var.global_settings.transit_enable_s2c_rx_balancing), null)
+
+  enable_segmentation = (
+    coalesce(
+      each.value.transit_enable_egress_transit_firenet,
+      var.global_settings.transit_enable_egress_transit_firenet
+    ) ?
+    false
+    :
+    coalesce(each.value.transit_segmentation, var.global_settings.transit_segmentation)
+  )
+
+  enable_transit_firenet = coalesce(
+    each.value.transit_enable_transit_firenet,
+    each.value.firenet,
+    var.global_settings.transit_enable_transit_firenet,
+    var.global_settings.firenet,
+  )
+
   gw_name                          = each.value.transit_gw_name
   ha_bgp_lan_interfaces            = each.value.transit_ha_bgp_lan_interfaces
   ha_cidr                          = each.value.transit_ha_cidr
-  ha_gw                            = each.value.transit_ha_gw
+  ha_gw                            = try(coalesce(each.value.transit_ha_gw, var.global_settings.transit_ha_gw), null)
   ha_region                        = each.value.transit_ha_region
   hybrid_connection                = each.value.transit_hybrid_connection
-  insane_mode                      = each.value.transit_insane_mode
+  insane_mode                      = try(coalesce(each.value.transit_insane_mode, var.global_settings.transit_insane_mode), null)
   instance_size                    = each.value.transit_instance_size
   lan_cidr                         = each.value.transit_lan_cidr
-  learned_cidr_approval            = each.value.transit_learned_cidr_approval
-  learned_cidrs_approval_mode      = each.value.transit_learned_cidrs_approval_mode
+  learned_cidr_approval            = try(coalesce(each.value.transit_learned_cidr_approval, var.global_settings.transit_learned_cidr_approval), null)
+  learned_cidrs_approval_mode      = try(coalesce(each.value.transit_learned_cidrs_approval_mode, var.global_settings.transit_learned_cidrs_approval_mode), null)
   legacy_transit_vpc               = each.value.transit_legacy_transit_vpc
   name                             = each.value.transit_name
   resource_group                   = each.value.transit_resource_group
-  single_az_ha                     = each.value.transit_single_az_ha
+  single_az_ha                     = try(coalesce(each.value.transit_single_az_ha, var.global_settings.transit_single_az_ha), null)
   single_ip_snat                   = each.value.transit_single_ip_snat
-  tags                             = each.value.transit_tags
-  tunnel_detection_time            = each.value.transit_tunnel_detection_time
+  tags                             = try(coalesce(each.value.transit_tags, var.global_settings.transit_tags), null)
+  tunnel_detection_time            = try(coalesce(each.value.transit_tunnel_detection_time, var.global_settings.transit_tunnel_detection_time), null)
   availability_domain              = each.value.transit_availability_domain
   ha_availability_domain           = each.value.transit_ha_availability_domain
   fault_domain                     = each.value.transit_fault_domain
   ha_fault_domain                  = each.value.transit_ha_fault_domain
-  enable_preserve_as_path          = each.value.transit_enable_preserve_as_path
+  enable_preserve_as_path          = try(coalesce(each.value.transit_enable_preserve_as_path, var.global_settings.transit_enable_preserve_as_path), null)
   enable_gateway_load_balancer     = each.value.transit_enable_gateway_load_balancer
   bgp_lan_interfaces_count         = each.value.transit_bgp_lan_interfaces_count
   private_mode_lb_vpc_id           = each.value.transit_private_mode_lb_vpc_id
@@ -62,44 +85,55 @@ module "transit" {
   azure_eip_name_resource_group    = each.value.transit_azure_eip_name_resource_group
   ha_azure_eip_name_resource_group = each.value.transit_ha_azure_eip_name_resource_group
   enable_vpc_dns_server            = each.value.transit_enable_vpc_dns_server
-  enable_monitor_gateway_subnets   = each.value.transit_enable_monitor_gateway_subnets
+  enable_monitor_gateway_subnets   = try(coalesce(each.value.transit_enable_monitor_gateway_subnets, var.global_settings.transit_enable_monitor_gateway_subnets), null)
+  enable_gro_gso                   = try(coalesce(each.value.transit_enable_gro_gso, var.global_settings.transit_enable_gro_gso), null)
+  bgp_hold_time                    = try(coalesce(each.value.transit_bgp_hold_time, var.global_settings.transit_bgp_hold_time), null)
 }
 
 #This module builds out firenet, only on transits for which Firenet is enabled.
 module "firenet" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "1.4.1"
+  version = "1.5.0"
 
-  for_each = { for k, v in var.transit_firenet : k => v if v.firenet } #Filter transits that have firenet enabled
+  #Filter transits that have firenet enabled
+  for_each = { for k, v in var.transit_firenet : k => v if
+    try(coalesce(v.firenet), false) || (var.global_settings.firenet && v.firenet == null)
+  }
 
   transit_module = module.transit[each.key]
 
-  attached                             = each.value.firenet_attached
-  bootstrap_bucket_name_1              = each.value.firenet_bootstrap_bucket_name_1
-  bootstrap_bucket_name_2              = each.value.firenet_bootstrap_bucket_name_2
-  bootstrap_storage_name_1             = each.value.firenet_bootstrap_storage_name_1
-  bootstrap_storage_name_2             = each.value.firenet_bootstrap_storage_name_2
-  custom_fw_names                      = each.value.firenet_custom_fw_names
-  east_west_inspection_excluded_cidrs  = each.value.firenet_east_west_inspection_excluded_cidrs
-  egress_cidr                          = each.value.firenet_egress_cidr
-  egress_enabled                       = each.value.firenet_egress_enabled
-  egress_static_cidrs                  = each.value.firenet_egress_static_cidrs
-  file_share_folder_1                  = each.value.firenet_file_share_folder_1
-  file_share_folder_2                  = each.value.firenet_file_share_folder_2
-  firewall_image                       = coalesce(each.value.firenet_firewall_image, lookup(var.default_firenet_firewall_image, each.value.transit_cloud, null))
+  attached                            = try(coalesce(each.value.firenet_attached, var.global_settings.firenet.attached), null)
+  bootstrap_bucket_name_1             = each.value.firenet_bootstrap_bucket_name_1
+  bootstrap_bucket_name_2             = each.value.firenet_bootstrap_bucket_name_2
+  bootstrap_storage_name_1            = each.value.firenet_bootstrap_storage_name_1
+  bootstrap_storage_name_2            = each.value.firenet_bootstrap_storage_name_2
+  custom_fw_names                     = each.value.firenet_custom_fw_names
+  east_west_inspection_excluded_cidrs = try(coalesce(each.value.firenet_east_west_inspection_excluded_cidrs, var.global_settings.firenet_east_west_inspection_excluded_cidrs), null)
+  egress_cidr                         = each.value.firenet_egress_cidr
+  egress_enabled                      = try(coalesce(each.value.firenet_egress_enabled, var.global_settings.firenet_egress_enabled), null)
+  egress_static_cidrs                 = try(coalesce(each.value.firenet_egress_static_cidrs, var.global_settings.firenet_egress_static_cidrs), null)
+  file_share_folder_1                 = each.value.firenet_file_share_folder_1
+  file_share_folder_2                 = each.value.firenet_file_share_folder_2
+
+  firewall_image = coalesce(
+    each.value.firenet_firewall_image,
+    lookup(var.default_firenet_firewall_image, each.value.transit_cloud, null), #To be removed when removing support for default_transit_accounts variable
+    lookup(var.global_settings.firenet_firewall_image, each.value.transit_cloud, null),
+  )
+
   firewall_image_id                    = each.value.firenet_firewall_image_id
   firewall_image_version               = each.value.firenet_firewall_image_version
-  fw_amount                            = each.value.firenet_fw_amount
+  fw_amount                            = try(coalesce(each.value.firenet_fw_amount, var.global_settings.firenet_fw_amount), null)
   iam_role_1                           = each.value.firenet_iam_role_1
   iam_role_2                           = each.value.firenet_iam_role_2
-  inspection_enabled                   = each.value.firenet_inspection_enabled
+  inspection_enabled                   = try(coalesce(each.value.firenet_inspection_enabled, var.global_settings.firenet_inspection_enabled), null)
   instance_size                        = each.value.firenet_instance_size
-  keep_alive_via_lan_interface_enabled = each.value.firenet_keep_alive_via_lan_interface_enabled
+  keep_alive_via_lan_interface_enabled = try(coalesce(each.value.firenet_keep_alive_via_lan_interface_enabled, var.global_settings.firenet_keep_alive_via_lan_interface_enabled), null)
   mgmt_cidr                            = each.value.firenet_mgmt_cidr
   password                             = each.value.firenet_password
   storage_access_key_1                 = each.value.firenet_storage_access_key_1
   storage_access_key_2                 = each.value.firenet_storage_access_key_2
-  tags                                 = each.value.firenet_tags
+  tags                                 = try(coalesce(each.value.firenet_tags, var.global_settings.firenet_tags), null)
   user_data_1                          = each.value.firenet_user_data_1
   user_data_2                          = each.value.firenet_user_data_2
   username                             = each.value.firenet_username
@@ -164,5 +198,6 @@ resource "aviatrix_transit_gateway_peering" "custom_peering" {
   tunnel_count                                = each.value.tunnel_count
   enable_peering_over_private_network         = each.value.enable_peering_over_private_network
   enable_insane_mode_encryption_over_internet = each.value.enable_insane_mode_encryption_over_internet
+  enable_max_performance                      = each.value.enable_max_performance
 }
 ##########################################

@@ -1,5 +1,53 @@
 # terraform-aviatrix-backbone - release notes
 
+## v1.2.3
+- Add support for `enable_active_standby`.
+
+## v1.2.2
+- Add support for setting `enable_max_performance` on custom peerings map.
+
+## v1.2.1
+- Add support for BGP Hold time for transit gateway.
+- Introduction of global_settings variable
+- With the introduction of global settings, the variables `default_firenet_firewall_image` and `default_transit_accounts` are being deprecated. Use the `transit_accounts` and `firenet_firewall_image` fields in the global settings map in stead. Example:
+
+In stead of:
+```hcl
+  default_firenet_firewall_image = {
+    aws   = "Palo Alto Networks VM-Series Next-Generation Firewall Bundle 1",
+    azure = "Palo Alto Networks VM-Series Next-Generation Firewall Bundle 1",
+    gcp   = "Palo Alto Networks VM-Series Next-Generation Firewall BUNDLE1",
+  }
+
+  default_transit_accounts = {
+    azure = "Azure",
+    oci   = "OCI",
+    aws   = "AWS",
+  }
+```
+
+Please do:
+```hcl
+  global_settings = {
+
+    firenet_firewall_image = {
+        aws   = "Palo Alto Networks VM-Series Next-Generation Firewall Bundle 1",
+        azure = "Palo Alto Networks VM-Series Next-Generation Firewall Bundle 1",
+        gcp   = "Palo Alto Networks VM-Series Next-Generation Firewall BUNDLE1",
+    }
+
+    transit_accounts = {
+      azure = "Azure",
+      oci   = "OCI",
+      aws   = "AWS",
+    }
+    
+  }
+```
+
+## v1.2.0
+- Bump module versions to support Controller version 7.1 and provider version 3.1.x.
+
 ## v1.1.2
 - Add support for enable_monitor_gateway_subnets
 - Fix input variable type for transit_bgp_lan_interfaces and transit_ha_bgp_lan_interfaces.
