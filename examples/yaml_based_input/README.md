@@ -3,7 +3,7 @@ Any map data can also easily be inserted as a YAML file.
 A simple example of a YAML file below, which contains the values we would like to use for the transit_firenet argument:
 
 transit.yaml:
-```hcl
+```yml
 transit1:
   transit_ha_gw: false
   transit_asn: 65101
@@ -28,7 +28,7 @@ transit4:
 
 This file can then be ingested with the yamldecode function:
 
-```
+```hcl
 module "framework" {
   source  = "terraform-aviatrix-modules/backbone/aviatrix"
   version = "v1.2.3"
