@@ -1,5 +1,8 @@
 # terraform-aviatrix-backbone - release notes
 
+## v1.3.0
+- Bump module versions to support Controller version 7.2 and provider version 3.2.x.
+
 ## v1.2.3
 - Add support for `enable_active_standby`.
 
@@ -11,7 +14,7 @@
 - Introduction of global_settings variable
 - With the introduction of global settings, the variables `default_firenet_firewall_image` and `default_transit_accounts` are being deprecated. Use the `transit_accounts` and `firenet_firewall_image` fields in the global settings map in stead. Example:
 
-In stead of:
+Instead of:
 ```hcl
   default_firenet_firewall_image = {
     aws   = "Palo Alto Networks VM-Series Next-Generation Firewall Bundle 1",
