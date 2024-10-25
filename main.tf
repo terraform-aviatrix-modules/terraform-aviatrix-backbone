@@ -1,7 +1,7 @@
 #This module builds out all transits
 module "transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.5.1"
+  version = "2.6.0"
 
   for_each = var.transit_firenet
 
@@ -93,7 +93,7 @@ module "transit" {
 #This module builds out firenet, only on transits for which Firenet is enabled.
 module "firenet" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "1.5.0"
+  version = "1.6.0"
 
   #Filter transits that have firenet enabled
   for_each = { for k, v in var.transit_firenet : k => v if
@@ -121,22 +121,21 @@ module "firenet" {
     lookup(var.global_settings.firenet_firewall_image, each.value.transit_cloud, null),
   )
 
-  firewall_image_id                    = each.value.firenet_firewall_image_id
-  firewall_image_version               = each.value.firenet_firewall_image_version
-  fw_amount                            = try(coalesce(each.value.firenet_fw_amount, var.global_settings.firenet_fw_amount), null)
-  iam_role_1                           = each.value.firenet_iam_role_1
-  iam_role_2                           = each.value.firenet_iam_role_2
-  inspection_enabled                   = try(coalesce(each.value.firenet_inspection_enabled, var.global_settings.firenet_inspection_enabled), null)
-  instance_size                        = each.value.firenet_instance_size
-  keep_alive_via_lan_interface_enabled = try(coalesce(each.value.firenet_keep_alive_via_lan_interface_enabled, var.global_settings.firenet_keep_alive_via_lan_interface_enabled), null)
-  mgmt_cidr                            = each.value.firenet_mgmt_cidr
-  password                             = each.value.firenet_password
-  storage_access_key_1                 = each.value.firenet_storage_access_key_1
-  storage_access_key_2                 = each.value.firenet_storage_access_key_2
-  tags                                 = try(coalesce(each.value.firenet_tags, var.global_settings.firenet_tags), null)
-  user_data_1                          = each.value.firenet_user_data_1
-  user_data_2                          = each.value.firenet_user_data_2
-  username                             = each.value.firenet_username
+  firewall_image_id      = each.value.firenet_firewall_image_id
+  firewall_image_version = each.value.firenet_firewall_image_version
+  fw_amount              = try(coalesce(each.value.firenet_fw_amount, var.global_settings.firenet_fw_amount), null)
+  iam_role_1             = each.value.firenet_iam_role_1
+  iam_role_2             = each.value.firenet_iam_role_2
+  inspection_enabled     = try(coalesce(each.value.firenet_inspection_enabled, var.global_settings.firenet_inspection_enabled), null)
+  instance_size          = each.value.firenet_instance_size
+  mgmt_cidr              = each.value.firenet_mgmt_cidr
+  password               = each.value.firenet_password
+  storage_access_key_1   = each.value.firenet_storage_access_key_1
+  storage_access_key_2   = each.value.firenet_storage_access_key_2
+  tags                   = try(coalesce(each.value.firenet_tags, var.global_settings.firenet_tags), null)
+  user_data_1            = each.value.firenet_user_data_1
+  user_data_2            = each.value.firenet_user_data_2
+  username               = each.value.firenet_username
 }
 
 ### Peering for full_mesh peering mode ###
