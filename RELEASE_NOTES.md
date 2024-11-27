@@ -1,5 +1,8 @@
 # terraform-aviatrix-backbone - release notes
 
+## v1.2.3
+- Add support for `enable_active_standby`.
+
 ## v1.2.2
 - Add support for setting `enable_max_performance` on custom peerings map.
 

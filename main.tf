@@ -25,6 +25,7 @@ module "transit" {
   bgp_polling_time                 = try(coalesce(each.value.transit_bgp_polling_time, var.global_settings.transit_bgp_polling_time), null)
   connected_transit                = try(coalesce(each.value.transit_connected_transit, var.global_settings.transit_connected_transit), null)
   customer_managed_keys            = try(coalesce(each.value.transit_customer_managed_keys, var.global_settings.transit_customer_managed_keys), null)
+  enable_active_standby            = each.value.transit_enable_active_standby
   enable_active_standby_preemptive = try(coalesce(each.value.transit_enable_active_standby_preemptive, var.global_settings.transit_enable_active_standby_preemptive), null)
   enable_advertise_transit_cidr    = try(coalesce(each.value.transit_enable_advertise_transit_cidr, var.global_settings.transit_enable_advertise_transit_cidr), null)
   enable_bgp_over_lan              = each.value.transit_enable_bgp_over_lan
