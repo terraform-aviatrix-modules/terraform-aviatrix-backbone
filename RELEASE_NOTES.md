@@ -6,7 +6,7 @@
 ## v1.3.0
 - Bump module versions to support Controller version 7.2 and provider version 3.2.x.
 
-## v1.2.3
+## v1.2.4
 - Add support for `enable_active_standby`.
 
 ## v1.2.2
