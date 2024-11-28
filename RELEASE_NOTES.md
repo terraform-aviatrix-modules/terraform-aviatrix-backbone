@@ -1,6 +1,6 @@
 # terraform-aviatrix-backbone - release notes
 
-## v1.2.3
+## v1.2.4
 - Add support for `enable_active_standby`.
 
 ## v1.2.2

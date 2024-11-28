@@ -6,7 +6,7 @@ This module composes the [mc-transit](https://github.com/terraform-aviatrix-modu
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version | Used Transit module | Used Firenet module
 :--- | :--- | :--- | :--- | :--- | :--- 
-v1.2.3 | >=1.3.0 | >= 7.1 | ~> 3.1.0 | v2.5.1 | v1.5.0
+v1.2.4 | >=1.3.0 | >= 7.1 | ~> 3.1.0 | v2.5.1 | v1.5.0
 
 Check [release notes](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/RELEASE_NOTES.md) for more details.
 Check [compatibility list](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/COMPATIBILITY.md) for older versions.
@@ -15,7 +15,7 @@ Check [compatibility list](https://github.com/terraform-aviatrix-modules/terrafo
 ```hcl
 module "framework" {
   source  = "terraform-aviatrix-modules/backbone/aviatrix"
-  version = "v1.2.3"
+  version = "v1.2.4"
 
   global_settings = {
 
@@ -217,6 +217,7 @@ transit_bgp_ecmp | bool
 transit_bgp_polling_time | number
 transit_connected_transit| bool
 transit_customer_managed_keys| bool
+transit_enable_active_standby | bool
 transit_enable_active_standby_preemptive | bool
 transit_enable_advertise_transit_cidr| bool
 transit_enable_egress_transit_firenet| bool
