@@ -217,6 +217,7 @@ The following items are supported:
 | transit_bgp_polling_time                     | number       |
 | transit_connected_transit                    | bool         |
 | transit_customer_managed_keys                | bool         |
+| transit_enable_active_standby                | bool         |
 | transit_enable_active_standby_preemptive     | bool         |
 | transit_enable_advertise_transit_cidr        | bool         |
 | transit_enable_egress_transit_firenet        | bool         |

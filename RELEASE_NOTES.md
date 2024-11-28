@@ -1,5 +1,8 @@
 # terraform-aviatrix-backbone - release notes
 
+## v1.3.1
+- Add support for active standby in global settings
+
 ## v1.3.0
 - Bump module versions to support Controller version 7.2 and provider version 3.2.x.
 
