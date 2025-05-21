@@ -1,7 +1,7 @@
 #This module builds out all transits
 module "transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.6.0"
+  version = "8.0.0"
 
   for_each = var.transit_firenet
 
@@ -93,7 +93,7 @@ module "transit" {
 #This module builds out firenet, only on transits for which Firenet is enabled.
 module "firenet" {
   source  = "terraform-aviatrix-modules/mc-firenet/aviatrix"
-  version = "1.6.0"
+  version = "8.0.0"
 
   #Filter transits that have firenet enabled
   for_each = { for k, v in var.transit_firenet : k => v if
@@ -142,7 +142,7 @@ module "firenet" {
 #Create full mesh peering 
 module "full_mesh_peering" {
   source  = "terraform-aviatrix-modules/mc-transit-peering/aviatrix"
-  version = "1.0.8"
+  version = "1.0.9"
 
   count = local.peering_mode == "full_mesh" ? 1 : 0
 
@@ -156,7 +156,7 @@ module "full_mesh_peering" {
 #Create full mesh peering intra-cloud  
 module "full_mesh_optimized_peering_intra_cloud" {
   source  = "terraform-aviatrix-modules/mc-transit-peering/aviatrix"
-  version = "1.0.8"
+  version = "1.0.9"
 
   for_each = local.peering_mode == "full_mesh_optimized" ? toset(local.cloudlist) : []
 

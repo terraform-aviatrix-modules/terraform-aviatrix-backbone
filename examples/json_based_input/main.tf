@@ -1,6 +1,6 @@
 module "framework" {
   source  = "terraform-aviatrix-modules/backbone/aviatrix"
-  version = "v1.3.1"
+  version = "v8.0.0"
 
   global_settings = {
     transit_accounts = {
