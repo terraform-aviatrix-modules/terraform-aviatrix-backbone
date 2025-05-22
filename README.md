@@ -6,7 +6,7 @@ This module composes the [mc-transit](https://github.com/terraform-aviatrix-modu
 ### Compatibility
 | Module version | Terraform version | Controller version | Terraform provider version | Used Transit module | Used Firenet module |
 | :------------- | :---------------- | :----------------- | :------------------------- | :------------------ | :------------------ |
-| v1.3.0         | >=1.3.0           | >= 7.2             | ~> 3.2.0                   | v2.6.0              | v1.6.0              |
+| v8.0.0         | >=1.3.0           | >= 8.0             | >= 8.0.0                   | v8.0.0              | v8.0.0              |
 
 Check [release notes](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/RELEASE_NOTES.md) for more details.
 Check [compatibility list](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-backbone/blob/main/COMPATIBILITY.md) for older versions.
@@ -15,7 +15,7 @@ Check [compatibility list](https://github.com/terraform-aviatrix-modules/terrafo
 ```hcl
 module "framework" {
   source  = "terraform-aviatrix-modules/backbone/aviatrix"
-  version = "v1.3.0"
+  version = "v8.0.0"
 
   global_settings = {
 
